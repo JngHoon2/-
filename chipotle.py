@@ -58,9 +58,33 @@ print(chipo['item_price'].head())
 print('----------------------------------------')
 chipo['item_price'] = chipo['item_price'].apply(lambda x: float(x[1:])) 
 print(chipo.describe())
-
-chipo.groupby('order_id')['item_price'].sum().mean()
+print('----------------------------------------')
+print(chipo.groupby('order_id')['item_price'].sum().mean())
+print('----------------------------------------')
 chipo.head()
+
+print('----------------------------------------')
+chipo_order_group = chipo.groupby('order_id').sum()
+result = chipo_order_group[chipo_order_group.item_price >= 10]
+print(result[:10])
+
+print('----------------------------------------')
+chipo_one_item = chipo[chipo.quantity == 1]
+price_per_item = chipo_one_item.groupby('item_name').min()
+price_per_item.sort_values(by = 'item_price', ascending = False)[:10]
+
+item_name_list = price_per_item.index.tolist()
+x_pos = np.arange(len(item_name_list))
+item_price = price_per_item['item_price'].tolist()
+plt.bar(x_pos, item_price, align = 'center')
+plt.ylabel('item price($)')
+plt.title('Discribution of item price')
+plt.show()
+
+plt.hist(item_price)
+plt.ylabel('counts')
+plt.title('Discribution of item price')
+plt.show()
 
 # %%
 
