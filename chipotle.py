@@ -72,10 +72,13 @@ print('----------------------------------------')
 chipo_one_item = chipo[chipo.quantity == 1]
 price_per_item = chipo_one_item.groupby('item_name').min()
 price_per_item.sort_values(by = 'item_price', ascending = False)[:10]
+print(price_per_item)
 
 item_name_list = price_per_item.index.tolist()
 x_pos = np.arange(len(item_name_list))
+
 item_price = price_per_item['item_price'].tolist()
+
 plt.bar(x_pos, item_price, align = 'center')
 plt.ylabel('item price($)')
 plt.title('Discribution of item price')
@@ -83,8 +86,26 @@ plt.show()
 
 plt.hist(item_price)
 plt.ylabel('counts')
-plt.title('Discribution of item price')
+plt.title('Histogram of item price')
 plt.show()
+
+chipo.groupby('order_id').sum().sort_values(by = 'item_price', ascending = False)[:5]
+print('----------------------------------------')
+
+chipo_salad = chipo[chipo['item_name'] == 'Veggie Salad Bowl']
+print(len(chipo_salad))
+print('----------------------------------------')
+
+chipo_salad = chipo_salad.drop_duplicates(['item_name', 'order_id'])
+
+print(len(chipo_salad))
+chipo_salad.head(5)
+
+print('----------------------------------------')
+chipo_chicken = chipo[chipo['item_name'] == 'Chicken Bowl']
+chipo_chicken_result = chipo_chicken[chipo_chicken['quantity'] >=2]
+print(chipo_chicken_result.head())
+print('----------------------------------------')
 
 # %%
 
